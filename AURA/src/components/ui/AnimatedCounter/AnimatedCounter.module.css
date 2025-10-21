@@ -1,0 +1,8 @@
+.animated-counter {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.animated-counter.counting {
+  transform: scale(1.05);
+}
