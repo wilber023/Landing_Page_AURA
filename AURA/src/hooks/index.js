@@ -147,7 +147,8 @@ export const useSmoothScroll = () => {
 export const useMobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = useCallback(() => {
+  const toggleMenu = useCallback((e) => {
+    e.stopPropagation();
     setIsOpen(prev => !prev);
   }, []);
 
@@ -155,17 +156,42 @@ export const useMobileMenu = () => {
     setIsOpen(false);
   }, []);
 
+  // Cerrar menú al hacer clic fuera o presionar Escape
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isOpen && !e.target.closest('.nav')) {
+        closeMenu();
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        closeMenu();
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isOpen) {
+        closeMenu();
+      }
+    };
+
     if (isOpen) {
       document.body.classList.add('menu-open');
+      document.addEventListener('click', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
+      window.addEventListener('resize', handleResize);
     } else {
       document.body.classList.remove('menu-open');
     }
 
     return () => {
       document.body.classList.remove('menu-open');
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('resize', handleResize);
     };
-  }, [isOpen]);
+  }, [isOpen, closeMenu]);
 
   return { isOpen, toggleMenu, closeMenu };
 };

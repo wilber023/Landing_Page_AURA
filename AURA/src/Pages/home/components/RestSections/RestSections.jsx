@@ -29,43 +29,46 @@ const Impact = () => {
   ];
 
   return (
-    <section id="impacto" className="section impact-section">
-      <div className="container">
-        <div className="impact-header">
-          <div className="impact-text">
-            <h2 className="section-title">Impacto medible</h2>
-            <p className="section-description">
-              Resultados cuantificables que demuestran la efectividad de nuestra plataforma en el fortalecimiento de la salud mental juvenil.
-            </p>
-          </div>
-          <div className="impact-visual">
-            <img 
-              src={img4} 
-              alt="Comunidad de jóvenes conectados y saludables" 
-              className="impact-image"
-            />
-          </div>
-        </div>
-
-        <div className="impact-metrics">
-          {metrics.map((metric, index) => (
-            <div key={index} className="metric-card">
-              <div className="metric-value">{metric.value}</div>
-              <div className="metric-label">{metric.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="impact-benefits">
-          {benefits.map((benefit, index) => (
-            <div key={index} className="benefit-card">
-              <h3>{benefit.title}</h3>
-              <p>{benefit.description}</p>
-            </div>
-          ))}
-        </div>
+<section id="impacto" className="section impact-section">
+  <div className="container">
+    <div className="impact-header">
+      <div className="impact-text">
+        <span className="section-title">Nuestro Impacto</span>
+        <h2 className="section-description">Transformando el futuro de la salud mental juvenil</h2>
+        <p className="section-description">
+          Resultados cuantificables que nos acercan a nuestra visión: <strong>ser la plataforma líder de prevención en donde ningún joven enfrente solo sus luchas emocionales.</strong> Cada métrica representa vidas transformadas y comunidades fortalecidas.
+        </p>
       </div>
-    </section>
+      <div className="impact-visual">
+        <img 
+          src={img4} 
+          alt="Comunidad de jóvenes conectados y saludables" 
+          className="impact-image"
+        />
+      </div>
+    </div>
+
+    <div className="impact-metrics">
+      {metrics.map((metric, index) => (
+        <div key={index} className="metric-card">
+          <div className="metric-value">{metric.value}</div>
+          <div className="metric-label">{metric.label}</div>
+        </div>
+      ))}
+    </div>
+
+    <div className="impact-benefits">
+      {benefits.map((benefit, index) => (
+        <div key={index} className="benefit-card">
+          <h3>{benefit.title}</h3>
+          <p>{benefit.description}</p>
+        </div>
+      ))}
+    </div>
+ 
+
+  </div>
+</section>
   );
 };
 

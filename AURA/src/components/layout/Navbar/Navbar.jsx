@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import Button from '../../ui/Button';
+import logo from '../../../assets/img/LogoAura2.jpg'
 import { useMobileMenu, useNavbarEffects, useSmoothScroll } from '../../../hooks';
 import './Navbar.css';
 
@@ -9,6 +10,28 @@ const Navbar = () => {
   
   // Initialize smooth scrolling
   useSmoothScroll();
+
+  // Función para manejar el scroll suave y cerrar el menú
+  const handleLinkClick = (href, e) => {
+    e.preventDefault();
+    closeMenu();
+    
+    // Pequeño delay para que el menú se cierre primero
+    setTimeout(() => {
+      if (href.startsWith('#')) {
+        const target = document.querySelector(href);
+        if (target) {
+          const navHeight = document.querySelector('.nav')?.offsetHeight || 80;
+          const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }, 300); // Tiempo para que se cierre el menú
+  };
 
   const navLinks = [
     { href: '#problema', text: 'Problemática' },
@@ -55,10 +78,10 @@ const Navbar = () => {
     >
       <div className="nav-container">
         <div className="logo">
-          <span className="logo-text">Reconexión Humana</span>
+            <img className="logo-icon" src={logo} alt="AURA Logo" />
         </div>
         
-        <ul className={`nav-links ${isOpen ? 'mobile-active' : ''}`}>
+        <ul className="nav-links">
           {navLinks.map((link, index) => (
             <li key={index}>
               <a href={link.href} onClick={closeMenu}>
@@ -86,11 +109,50 @@ const Navbar = () => {
             </Button>
           </li>
         </ul>
+
+        {/* Mobile Menu Overlay */}
+        {isOpen && <div className="mobile-menu-overlay" onClick={closeMenu}></div>}
+        
+        {/* Mobile Menu */}
+        <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
+          <div className="mobile-menu-links">
+            {navLinks.map((link, index) => (
+              <a 
+                key={index} 
+                href={link.href} 
+                onClick={(e) => handleLinkClick(link.href, e)}
+              >
+                {link.text}
+              </a>
+            ))}
+          </div>
+          <div className="mobile-menu-actions">
+            <Button 
+              onClick={() => {
+                const formulario = document.getElementById('contacto-form');
+                if (formulario) {
+                  formulario.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                  });
+                }
+                closeMenu();
+              }}
+              variant="primary" 
+              size="medium"
+              className="mobile-cta"
+            >
+              Contacto
+            </Button>
+          </div>
+        </div>
         
         <button 
           className={`mobile-menu-toggle ${isOpen ? 'active' : ''}`}
           onClick={toggleMenu}
-          aria-label="Abrir menú"
+          aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={isOpen}
+          type="button"
         >
           <span></span>
           <span></span>

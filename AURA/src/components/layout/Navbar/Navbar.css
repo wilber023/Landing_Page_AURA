@@ -1,4 +1,4 @@
-/* Navbar Component Styles */
+ 
 
 .nav {
   position: fixed;
@@ -23,27 +23,34 @@
   transform: translateY(-100%);
 }
 
-.nav-container {
-  max-width: min(1200px, 100vw);
+.nav-container { 
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
   padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  overflow-x: hidden;
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--primary-blue);
-  text-decoration: none;
-  transition: var(--transition-fast);
+ width: 250px;
+ height: 60px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ 
+  overflow: hidden;
+ 
+
 }
 
-.logo:hover {
-  color: var(--secondary-blue);
+.logo-icon {
+  filter:
+    drop-shadow(0 0 10px rgba(0, 0, 0, 0.36)),
+    drop-shadow(0 0 10px rgba(4, 66, 76, 0.408)),  
+    drop-shadow(0 0 12px rgba(169, 213, 224, 0.517));  
+  transition: filter 0.3s ease;
 }
 
 .nav-links {
@@ -58,7 +65,7 @@
 .nav-links a {
   text-decoration: none;
   color: var(--dark-gray);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font -weight-medium);
   font-size: 0.95rem;
   transition: var(--transition-fast);
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -125,7 +132,7 @@
 
 .mobile-menu {
   position: fixed;
-  top: 100%;
+  top: 70px; /* Altura aproximada del navbar */
   left: 0;
   right: 0;
   background: var(--pure-white);
@@ -133,9 +140,12 @@
   transform: translateY(-100%);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
   z-index: 9999;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-menu.open {
@@ -174,6 +184,47 @@
   gap: var(--spacing-sm);
 }
 
+.mobile-menu-actions .mobile-cta {
+  width: 100%;
+  justify-content: center;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Hide mobile menu by default on desktop */
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none !important;
+  }
+  
+  .mobile-menu-overlay {
+    display: none !important;
+  }
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .nav-links {
@@ -182,6 +233,8 @@
   
   .mobile-menu-toggle {
     display: flex;
+    z-index: 10001;
+    position: relative;
   }
   
   .nav-container {
@@ -190,6 +243,10 @@
   
   .logo {
     font-size: 1.3rem;
+  }
+  
+  .mobile-menu {
+    display: block;
   }
 }
 
