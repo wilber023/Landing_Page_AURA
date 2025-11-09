@@ -1,0 +1,194 @@
+/* RestSections Component Specific Styles */
+
+/* Animaciones específicas para las secciones restantes */
+.benefit-card.animate,
+.inspiration-card.animate {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.benefit-card:nth-child(1) { animation-delay: 0.1s; }
+.benefit-card:nth-child(2) { animation-delay: 0.2s; }
+.benefit-card:nth-child(3) { animation-delay: 0.3s; }
+.benefit-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Inspiration Section */
+.inspiration-section {
+  background: linear-gradient(135deg, var(--light-gray) 0%, rgba(47, 95, 143, 0.05) 100%);
+  position: relative;
+  padding: var(--spacing-3xl) 0;
+}
+
+.inspiration-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #E5E7EB;
+}
+
+.inspiration-header {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.inspiration-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3xl);
+  align-items: center;
+}
+
+.inspiration-image .representation-image {
+  width: 100%;
+  max-width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(27, 54, 93, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.inspiration-image .representation-image:hover {
+  transform: translateY(-8px);
+}
+
+.inspiration-quote {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  font-style: italic;
+  margin-bottom: var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+  border-left: 4px solid var(--accent-teal);
+  background: rgba(255, 255, 255, 0.7);
+  padding: var(--spacing-lg);
+  border-radius: 8px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.inspiration-message {
+  font-size: 1.1rem;
+  color: var(--primary-blue);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.inspiration-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-blue);
+  transition: var(--transition-smooth);
+}
+
+.stat-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-highlight {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-blue);
+  line-height: 1;
+}
+
+.stat-description {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+  margin-top: var(--spacing-xs);
+}
+
+@media (max-width: 768px) {
+  .inspiration-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+  
+  .inspiration-image .representation-image {
+    height: 300px;
+  }
+}
+
+/* Privacy Section */
+.privacy-section {
+  background: var(--dark-gray);
+  color: white;
+  position: relative;
+}
+
+.privacy-section .section-title {
+  color: white;
+}
+
+.privacy-section .section-description {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.privacy-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: var(--spacing-lg);
+  overflow-x: hidden;
+}
+
+.privacy-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-lg);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition-smooth);
+  position: relative;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.privacy-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-teal);
+}
+
+.privacy-card .privacy-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--accent-teal);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.privacy-card .privacy-icon svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.privacy-card h3 {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-bold);
+  color: white;
+  margin-bottom: var(--spacing-sm);
+}
+
+.privacy-card p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  font-size: 1rem;
+}

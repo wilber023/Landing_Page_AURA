@@ -1,0 +1,47 @@
+/* Hero Component Specific Styles */
+
+/* Animaciones para el Hero */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero-content {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-visual {
+  animation: fadeInRight 0.8s ease-out 0.2s both;
+}
+
+/* Typing effect específico */
+.typing-text {
+  border-right: 2px solid var(--primary-blue);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { 
+    border-color: var(--primary-blue); 
+  }
+  51%, 100% { 
+    border-color: transparent; 
+  }
+}

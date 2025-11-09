@@ -1,0 +1,287 @@
+/* Solution Component Specific Styles */
+
+/* Enhanced Solution Cards */
+.solution-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3xl);
+  margin-bottom: var(--spacing-3xl);
+}
+
+.solution-card-enhanced {
+  background: var(--pure-white);
+  padding: var(--spacing-2xl);
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  transition: var(--transition-smooth);
+  position: relative;
+  box-shadow: var(--shadow-subtle);
+  overflow: hidden;
+}
+
+.solution-card-enhanced.primary {
+  border-left: 6px solid var(--primary-blue);
+  background: linear-gradient(135deg, rgba(27, 54, 93, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.solution-card-enhanced.secondary {
+  border-left: 6px solid var(--accent-teal);
+  background: linear-gradient(135deg, rgba(47, 95, 143, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.solution-card-enhanced:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(27, 54, 93, 0.15);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.solution-card-enhanced.primary .card-icon {
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+}
+
+.solution-card-enhanced.secondary .card-icon {
+  background: linear-gradient(135deg, var(--accent-teal), var(--primary-blue));
+}
+
+.card-header h3 {
+  font-size: 1.8rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-description {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
+.card-detailed-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-xl);
+  font-style: italic;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: var(--spacing-lg);
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(27, 54, 93, 0.1);
+  transition: var(--transition-smooth);
+}
+
+.feature-item:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: white;
+  background: linear-gradient(135deg, var(--primary-blue), var(--accent-teal));
+  flex-shrink: 0;
+}
+
+.feature-content h4 {
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.feature-content p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Additional Features Section */
+.additional-features {
+  border-top: 2px solid #E5E7EB;
+  padding-top: var(--spacing-3xl);
+}
+
+.additional-features-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.additional-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--spacing-xl);
+}
+
+.additional-feature-card {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: var(--pure-white);
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.additional-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+}
+
+.additional-feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(27, 54, 93, 0.15);
+  border-color: var(--primary-blue);
+}
+
+.additional-feature-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-blue), var(--accent-teal));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.additional-feature-card h4 {
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.additional-feature-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Animaciones específicas para Solution */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.solution-text.animate {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.solution-image.animate {
+  animation: slideInRight 0.6s ease-out 0.2s both;
+}
+
+.solution-card-enhanced.animate {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.solution-card-enhanced:nth-child(1) { animation-delay: 0.1s; }
+.solution-card-enhanced:nth-child(2) { animation-delay: 0.3s; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .card-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .additional-features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .solution-card-enhanced {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-description {
+    font-size: 1.1rem;
+  }
+  
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .additional-features-title {
+    font-size: 1.7rem;
+  }
+}
