@@ -35,7 +35,7 @@ const ContactForm = () => {
   const [error, setError] = useState('');
 
   // URL de tu API backend
-  const API_URL = 'http://98.95.53.50';
+  const API_URL = 'https://98.95.53.50';
 
   const categories = [
     { value: 'help', label: 'Solicitar ayuda para jóvenes en riesgo', icon: <FaUsers /> },
