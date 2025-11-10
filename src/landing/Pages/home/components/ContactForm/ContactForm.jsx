@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
 import Button from '../../../../components/ui/Button';
 import { 
   FaRocket, 
@@ -8,7 +7,6 @@ import {
   FaUsers, 
   FaHandshake, 
   FaTools, 
-  FaChartLine, 
   FaFlask,
   FaCheckCircle,
   FaBullseye,
@@ -36,9 +34,8 @@ const ContactForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
 
-  const EMAIL_SERVICE_ID = 'service_w0qjqxr';
-  const EMAIL_TEMPLATE_ID = 'template_contact_form';
-  const EMAIL_PUBLIC_KEY = 'user_QpgFhSGDt8J9CQ3bP';
+  // URL de tu API backend
+  const API_URL = 'http://98.95.53.50';
 
   const categories = [
     { value: 'help', label: 'Solicitar ayuda para jóvenes en riesgo', icon: <FaUsers /> },
@@ -76,148 +73,35 @@ const ContactForm = () => {
     return urgency ? urgency.label : value;
   };
 
-  const sendEmail = async () => {
-    const templateParams = {
-      to_email: 'dev404.codmaster@gmail.com',
-      from_name: formData.name,
-      from_email: formData.email,
-      reply_to: formData.email,
-      company: formData.company,
-      phone: formData.phone || 'No proporcionado',
-      category: getCategoryLabel(formData.category),
-      urgency: getUrgencyLabel(formData.urgency),
-      message: formData.message,
-      submission_date: new Date().toLocaleString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      }),
-      subject: `[AURA] Consulta - ${getUrgencyLabel(formData.urgency)}`
-    };
-
-    console.log('Enviando email a dev404.codmaster@gmail.com');
-
-    const emailContent = `
-═══════════════════════════════════════
-NUEVA CONSULTA - AURA PLATFORM
-═══════════════════════════════════════
-
-ORIGEN: Formulario de Contacto Web
-SITIO: AURA - Reconexión Humana
-FECHA: ${templateParams.submission_date}
-
-───────────────────────────────────────
-DATOS DEL CONTACTO
-───────────────────────────────────────
-• Nombre Completo: ${templateParams.from_name}
-• Email de Contacto: ${templateParams.from_email}
-• Organización: ${templateParams.company}
-• Teléfono: ${templateParams.phone}
-
-───────────────────────────────────────
-INFORMACIÓN DE LA CONSULTA
-───────────────────────────────────────
-• Tipo de Consulta: ${templateParams.category}
-• Nivel de Prioridad: ${templateParams.urgency}
-• Estado: Nueva consulta pendiente de respuesta
-
-───────────────────────────────────────
-MENSAJE COMPLETO
-───────────────────────────────────────
-${templateParams.message}
-
-═══════════════════════════════════════
-SISTEMA AUTOMÁTICO AURA v2.0
-═══════════════════════════════════════
-Este email fue generado automáticamente desde
-el formulario de contacto de AURA Platform.
-
-Para responder, utiliza directamente el email:
-${templateParams.from_email}
-    `;
-
-    try {
-      console.log('Enviando via EmailJS directo a dev404.codmaster@gmail.com');
-      
-      const emailJSParams = {
-        to_email: 'dev404.codmaster@gmail.com',
-        from_name: templateParams.from_name,
-        from_email: templateParams.from_email,
-        subject: templateParams.subject,
-        message: emailContent,
-        reply_to: templateParams.from_email
-      };
-
-      const result = await emailjs.send(
-        'service_w0qjqxr',
-        'template_contact_form',
-        emailJSParams,
-        'user_QpgFhSGDt8J9CQ3bP'
-      );
-
-      console.log('EMAIL ENVIADO VÍA EMAILJS a dev404.codmaster@gmail.com:', result);
-      return result;
-      
-    } catch (emailJSError) {
-      console.log('EmailJS falló, intentando método alternativo...');
-      
-      try {
-        const formspreeResponse = await fetch('https://formspree.io/f/xgeqbvpw', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            name: templateParams.from_name,
-            email: templateParams.from_email,
-            subject: templateParams.subject,
-            message: emailContent,
-            _replyto: templateParams.from_email
-          })
-        });
-
-        if (formspreeResponse.ok) {
-          console.log('EMAIL ENVIADO VÍA FORMSPREE a dev404.codmaster@gmail.com');
-          return { status: 200, service: 'formspree' };
-        } else {
-          throw new Error('Formspree falló');
-        }
-      } catch (formspreeError) {
-        console.log('Todos los servicios fallaron, enviando nuevo FormSubmit...');
-        
-        const newFormData = new FormData();
-        newFormData.append('name', templateParams.from_name);
-        newFormData.append('email', templateParams.from_email);
-        newFormData.append('subject', templateParams.subject);
-        newFormData.append('message', emailContent);
-        newFormData.append('_captcha', 'false');
-        newFormData.append('_template', 'table');
-
-        const newResponse = await fetch('https://formsubmit.co/dev404.codmaster@gmail.com', {
-          method: 'POST',
-          body: newFormData
-        });
-
-        console.log('NUEVO FORMSUBMIT ENVIADO - Revisa tu email para activar');
-        return { status: 200, service: 'new-formsubmit' };
-      }
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
 
     try {
-      await sendEmail();
-      setSubmitted(true);
+      // Enviar datos a tu API
+      const response = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log('✅ Consulta enviada exitosamente:', result);
+        setSubmitted(true);
+      } else {
+        throw new Error(result.error || 'Error al enviar la consulta');
+      }
     } catch (error) {
-      console.error('Error enviando email:', error);
-      setError('Hubo un problema al enviar tu consulta. Por favor, intenta nuevamente o contacta directamente a dev404.codmaster@gmail.com');
+      console.error('❌ Error enviando consulta:', error);
+      setError(
+        error.message || 
+        'Hubo un problema al enviar tu consulta. Por favor, verifica tu conexión e intenta nuevamente.'
+      );
     } finally {
       setIsSubmitting(false);
     }
