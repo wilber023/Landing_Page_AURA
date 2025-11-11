@@ -22,7 +22,6 @@ const Solution = () => {
       description: 'Sistema de inteligencia artificial especializado en comprender y acompañar el bienestar emocional juvenil con sensibilidad humana.',
       detailedDescription: 'Nuestra IA no juzga, no castiga, solo acompaña. Utilizando procesamiento de lenguaje natural avanzado, identifica señales tempranas de vulnerabilidad mientras mantiene un diálogo empático y respetuoso.',
       features: [
-        { icon: <FaComments />, text: 'Análisis empático de patrones de comunicación', description: 'Comprende el contexto emocional detrás de cada conversación' },
         { icon: <FaClock />, text: 'Apoyo personalizado disponible 24/7', description: 'Respuesta inmediata en momentos críticos, sin esperas' },
         { icon: <FaUsers />, text: 'Conexión inteligente con redes de apoyo locales', description: 'Vincula automáticamente con recursos comunitarios apropiados' },
         { icon: <FaShieldAlt />, text: 'Protección total de la privacidad', description: 'Confidencialidad absoluta en cada interacción' }
@@ -35,9 +34,7 @@ const Solution = () => {
       description: 'Plataforma analítica que transforma datos anónimos en insights accionables para políticas públicas de salud mental efectivas.',
       detailedDescription: 'Identifica patrones y tendencias comunitarias sin comprometer la privacidad individual, permitiendo intervenciones preventivas a gran escala.',
       features: [
-        { icon: <FaMapMarkerAlt />, text: 'Mapeo inteligente de zonas de riesgo psicosocial', description: 'Visualización geográfica de necesidades de salud mental' },
         { icon: <FaTachometerAlt />, text: 'Dashboard con métricas en tiempo real', description: 'Monitoreo continuo del bienestar comunitario' },
-        { icon: <FaBalanceScale />, text: 'Optimización automática de recursos públicos', description: 'Asignación eficiente basada en datos reales' },
         { icon: <FaGlobe />, text: 'Impacto escalable a nivel comunitario', description: 'Soluciones que crecen con las necesidades de la población' }
       ],
       isPrimary: false
@@ -53,7 +50,7 @@ const Solution = () => {
     {
       icon: <FaShieldAlt />,
       title: 'Ética y Transparencia',
-      description: 'Código abierto, auditable y diseñado bajo los más altos estándares éticos internacionales.'
+      description: 'Código abierto, auditable y diseñado bajo los más altos estándares éticos.'
     },
     {
       icon: <FaUsers />,

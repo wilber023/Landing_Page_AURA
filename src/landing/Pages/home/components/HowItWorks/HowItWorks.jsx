@@ -11,14 +11,9 @@ const HowItWorks = () => {
       number: '02',
       title: 'Recomendaciones personalizadas',
       description: 'El sistema genera sugerencias contextualizadas de actividades, grupos y recursos disponibles en el entorno local del joven, promoviendo la reconexión social positiva.'
-    },
+    }, 
     {
       number: '03',
-      title: 'Apoyo continuo y seguimiento',
-      description: 'Proporcionamos acompañamiento constante a través de nuestra red de mentores verificados y profesionales especializados en salud mental juvenil.'
-    },
-    {
-      number: '04',
       title: 'Optimización de políticas públicas',
       description: 'Los datos anónimos agregados permiten a las autoridades de salud identificar tendencias y optimizar la asignación de recursos comunitarios.'
     }

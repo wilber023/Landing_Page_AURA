@@ -36,12 +36,11 @@ const Footer = () => {
       { href: '#privacidad', text: 'Privacidad', icon: <FaLock /> },
       { href: '#etica', text: 'Ética en IA', icon: <FaBalanceScale /> },
       { href: '#transparencia', text: 'Transparencia', icon: <FaEye /> },
-      { href: '#accesibilidad', text: 'Accesibilidad', icon: <FaUniversalAccess /> }
     ],
     contacto: [
       { href: 'mailto:contacto@plataformaaura.org', text: 'Información general', icon: <FaEnvelope /> },
       { href: 'mailto:colaboraciones@plataformaaura.org', text: 'Colaboraciones', icon: <FaHandshake /> },
-      { href: 'mailto:prensa@plataformaaura.org', text: 'Prensa', icon: <FaNewspaper /> }
+
     ]
   };
 
@@ -76,22 +75,7 @@ const Footer = () => {
               a través de inteligencia artificial empática y análisis predictivo para la optimización de políticas públicas.
             </p>
             
-            <div className="footer-certifications">
-              <h4 className="cert-section-title">
-                <FaShieldAlt className="cert-section-icon" />
-                Certificaciones de Calidad
-              </h4>
-              {certifications.map((cert, index) => (
-                <div key={index} className="cert-badge">
-                  <div className="cert-icon">{cert.icon}</div>
-                  <div className="cert-info">
-                    <span className="cert-title">{cert.title}</span>
-                    <span className="cert-desc">{cert.description}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
+            
             <div className="footer-social">
               <p className="social-title">Síguenos en redes</p>
               <div className="social-links">

@@ -47,14 +47,7 @@ const Impact = () => {
       </div>
     </div>
 
-    <div className="impact-metrics">
-      {metrics.map((metric, index) => (
-        <div key={index} className="metric-card">
-          <div className="metric-value">{metric.value}</div>
-          <div className="metric-label">{metric.label}</div>
-        </div>
-      ))}
-    </div>
+    
 
     <div className="impact-benefits">
       {benefits.map((benefit, index) => (
