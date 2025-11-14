@@ -16,6 +16,7 @@ import {
   FaInstagram,
   FaGithub
 } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import { 
   MdHealthAndSafety, 
   MdVerifiedUser,
@@ -23,6 +24,7 @@ import {
 } from 'react-icons/md';
 import { IoShieldCheckmark } from 'react-icons/io5';
 import { HiSparkles } from 'react-icons/hi2';
+import { Privacy } from '../../../Pages/home/components/RestSections';
 
 const Footer = () => {
   const footerLinks = {
@@ -157,13 +159,12 @@ const Footer = () => {
               &copy; 2025 AURA - Plataforma de Reconexión Humana.
               <span className="commitment"> Comprometidos con la transformación positiva de la salud mental juvenil.</span>
             </p>
-            <div className="footer-legal">
-              <a href="#terminos">Términos de Uso</a>
-              <span className="separator">|</span>
-              <a href="#privacidad">Política de Privacidad</a>
-              <span className="separator">|</span>
-              <a href="#cookies">Cookies</a>
-            </div>
+            
+          <div className="footer-legal">
+            <Link to="/privacidad">Términos de Uso</Link> 
+            <span className="separator">|</span> 
+              <Link to="/privacidad">Política de Privacidad</Link>
+          </div> 
           </div>
         </div>
       </div>
