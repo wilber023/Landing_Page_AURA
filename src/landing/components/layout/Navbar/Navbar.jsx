@@ -3,6 +3,7 @@ import Button from '../../ui/Button';
 import logo from '../../../../assets/img/LogoAura2.jpg';
 import { useMobileMenu, useNavbarEffects, useSmoothScroll } from '../../../hooks';
 import './Navbar.css';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const { isOpen, toggleMenu, closeMenu } = useMobileMenu();
@@ -78,7 +79,10 @@ const Navbar = () => {
     >
       <div className="nav-container">
         <div className="logo">
-            <img className="logo-icon" src={logo} alt="AURA Logo" />
+          <Link to={"/acceso-feed"}>
+          <img className="logo-icon" src={logo} alt="AURA Logo" />
+          </Link>
+             
         </div>
         
         <ul className="nav-links">
