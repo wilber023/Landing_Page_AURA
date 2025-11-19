@@ -12,12 +12,12 @@ export default function Layout() {
     navigate('/login');
   };
 
-  const navItems = [
-    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/alertas', icon: AlertTriangle, label: 'Alertas' },
-    { to: '/usuarios', icon: Users, label: 'Usuarios' },
-    { to: '/analiticas', icon: BarChart3, label: 'Analíticas' },
-  ];
+const navItems = [
+  { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/app/alertas', icon: AlertTriangle, label: 'Alertas' },
+  { to: '/app/usuarios', icon: Users, label: 'Usuarios' },
+  { to: '/app/analiticas', icon: BarChart3, label: 'Analíticas' },
+];
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
