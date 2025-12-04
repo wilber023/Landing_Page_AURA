@@ -1,31 +1,49 @@
-import { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Activity, Loader2, Mail, Lock } from 'lucide-react';
-import { Input } from '../components/ui/input';
-import { AuthContext } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     setError('');
 
-    const result = await login(email, password);
-    
-    if (result.success) {
-      navigate('/dashboard');
-    } else {
-      setError(result.error);
+    try {
+      // TODO: Reemplazar con endpoint real
+      // const response = await fetch('/api/auth/login', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email, password })
+      // });
+      
+      // if (!response.ok) {
+      //   const data = await response.json();
+      //   throw new Error(data.message || 'Error al iniciar sesión');
+      // }
+      
+      // const data = await response.json();
+      // // Guardar token en localStorage o contexto
+      // localStorage.setItem('token', data.token);
+      // // Redirigir al dashboard
+      // window.location.href = '/dashboard';
+      
+      // Simulación temporal para desarrollo
+      console.log('Login attempt:', { email, password });
+      setError('Funcionalidad de login pendiente de implementación');
+    } catch (err) {
+      setError(err.message || 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && email && password) {
+      handleSubmit();
+    }
   };
 
   return (
@@ -48,7 +66,7 @@ export default function Login() {
         border: '1px solid #e2e8f0'
       }}>
         
-   
+        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{
             width: '4rem',
@@ -80,7 +98,7 @@ export default function Login() {
         </div>
 
         {/* Formulario */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {/* Email */}
           <div>
             <label style={{ 
@@ -103,20 +121,25 @@ export default function Login() {
                 height: '1.125rem', 
                 color: '#94a3b8' 
               }} />
-              <Input
+              <input
                 type="email"
                 placeholder="admin@aura.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+                onKeyPress={handleKeyPress}
                 disabled={loading}
                 style={{ 
                   paddingLeft: '2.75rem', 
                   height: '2.75rem',
                   border: '1px solid #e2e8f0',
                   borderRadius: '0.5rem',
-                  width: '100%'
+                  width: '100%',
+                  fontSize: '0.875rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
                 }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
               />
             </div>
           </div>
@@ -143,20 +166,25 @@ export default function Login() {
                 height: '1.125rem', 
                 color: '#94a3b8' 
               }} />
-              <Input
+              <input
                 type="password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                onKeyPress={handleKeyPress}
                 disabled={loading}
                 style={{ 
                   paddingLeft: '2.75rem', 
                   height: '2.75rem',
                   border: '1px solid #e2e8f0',
                   borderRadius: '0.5rem',
-                  width: '100%'
+                  width: '100%',
+                  fontSize: '0.875rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
                 }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
               />
             </div>
           </div>
@@ -178,18 +206,18 @@ export default function Login() {
 
           {/* Botón */}
           <button
-            type="submit"
-            disabled={loading}
+            onClick={handleSubmit}
+            disabled={loading || !email || !password}
             style={{
               width: '100%',
               height: '2.75rem',
               fontSize: '0.875rem',
               fontWeight: '600',
-              backgroundColor: loading ? '#94a3b8' : '#0ea5e9',
+              backgroundColor: (loading || !email || !password) ? '#94a3b8' : '#0ea5e9',
               color: 'white',
               border: 'none',
               borderRadius: '0.5rem',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: (loading || !email || !password) ? 'not-allowed' : 'pointer',
               transition: 'all 0.2s',
               display: 'flex',
               alignItems: 'center',
@@ -197,10 +225,10 @@ export default function Login() {
               gap: '0.5rem'
             }}
             onMouseEnter={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#0284c7';
+              if (!loading && email && password) e.currentTarget.style.backgroundColor = '#0284c7';
             }}
             onMouseLeave={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#0ea5e9';
+              if (!loading && email && password) e.currentTarget.style.backgroundColor = '#0ea5e9';
             }}
           >
             {loading ? (
@@ -212,42 +240,16 @@ export default function Login() {
               'Iniciar Sesión'
             )}
           </button>
-
-          {/* Credenciales de prueba */}
-          <div style={{ textAlign: 'center', paddingTop: '0.5rem', borderTop: '1px solid #e2e8f0' }}>
-            <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
-              <Link to={"/home"}>Ir a la página de inicio</Link>
-            </p>
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '0.25rem',
-              backgroundColor: '#f8fafc',
-              padding: '0.75rem',
-              borderRadius: '0.5rem'
-            }}>
-              <p style={{ 
-                fontFamily: 'monospace', 
-                fontSize: '0.813rem', 
-                color: '#0ea5e9',
-                margin: 0,
-                fontWeight: '500'
-              }}>
-                admin@aura.com
-              </p>
-              <p style={{ 
-                fontFamily: 'monospace', 
-                fontSize: '0.813rem', 
-                color: '#0ea5e9',
-                margin: 0,
-                fontWeight: '500'
-              }}>
-                admin123
-              </p>
-            </div>
-          </div>
-        </form>
+ 
+        </div>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

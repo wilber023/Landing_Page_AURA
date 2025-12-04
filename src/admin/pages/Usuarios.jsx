@@ -1,87 +1,62 @@
-import { useState } from 'react';
-import { Users, Activity, AlertTriangle, CheckCircle, Search, TrendingUp, TrendingDown, MapPin, MessageSquare, Clock, Shield, Heart, Phone, Eye, User as UserIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Users, Activity, Search, TrendingUp, TrendingDown, MessageSquare, AlertTriangle, Shield } from 'lucide-react';
 
 export default function Usuarios() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [usuarios, setUsuarios] = useState([]);
+  const [stats, setStats] = useState({
+    total: 0,
+    activeToday: 0,
+    activeTodayPercentage: 0,
+    atRisk: 0,
+    stable: 0,
+    stablePercentage: 0
+  });
+  const [loading, setLoading] = useState(true);
 
-  const usuarios = [
-    { 
-      id: '#1843', 
-      edad: 17, 
-      ciudad: 'CDMX', 
-      riesgo: 'high', 
-      score: 85, 
-      tendencia: -15, 
-      conversaciones: 47,
-      alertas: 3,
-      ultimaAlerta: '2 días',
-      temasRecurrentes: ['ansiedad', 'soledad', 'autoestima'],
-      intervenciones: [
-        { fecha: '2025-10-21', tipo: 'Seguimiento especial asignado', resultado: 'Positivo' },
-        { fecha: '2025-10-18', tipo: 'Llamada de emergencia', resultado: 'Estabilizado' }
-      ]
-    },
-    { 
-      id: '#2457', 
-      edad: 22, 
-      ciudad: 'Guadalajara', 
-      riesgo: 'medium', 
-      score: 58, 
-      tendencia: 5, 
-      conversaciones: 89,
-      alertas: 1,
-      ultimaAlerta: '1 semana',
-      temasRecurrentes: ['trabajo', 'estrés', 'relaciones'],
-      intervenciones: [
-        { fecha: '2025-10-16', tipo: 'Seguimiento rutinario', resultado: 'Mejorando' }
-      ]
-    },
-    { 
-      id: '#1547', 
-      edad: 20, 
-      ciudad: 'Monterrey', 
-      riesgo: 'low', 
-      score: 32, 
-      tendencia: 12, 
-      conversaciones: 124,
-      alertas: 0,
-      ultimaAlerta: 'Nunca',
-      temasRecurrentes: ['crecimiento personal', 'metas', 'bienestar'],
-      intervenciones: []
-    },
-    { 
-      id: '#3021', 
-      edad: 19, 
-      ciudad: 'Puebla', 
-      riesgo: 'high', 
-      score: 78, 
-      tendencia: -8, 
-      conversaciones: 56,
-      alertas: 2,
-      ultimaAlerta: '3 días',
-      temasRecurrentes: ['depresión', 'familia', 'universidad'],
-      intervenciones: [
-        { fecha: '2025-10-20', tipo: 'Derivado a psicólogo', resultado: 'En proceso' }
-      ]
-    },
-    { 
-      id: '#2789', 
-      edad: 24, 
-      ciudad: 'Querétaro', 
-      riesgo: 'medium', 
-      score: 52, 
-      tendencia: 3, 
-      conversaciones: 67,
-      alertas: 1,
-      ultimaAlerta: '2 semanas',
-      temasRecurrentes: ['ansiedad', 'cambios', 'futuro'],
-      intervenciones: [
-        { fecha: '2025-10-08', tipo: 'Seguimiento por chat', resultado: 'Útil' }
-      ]
-    },
-  ];
+  useEffect(() => {
+    fetchUsuarios();
+    fetchStats();
+  }, []);
+
+  const fetchUsuarios = async () => {
+    try {
+      setLoading(true);
+      // TODO: Reemplazar con endpoint real
+      // const response = await fetch('/api/usuarios');
+      // const data = await response.json();
+      // setUsuarios(data);
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      // TODO: Reemplazar con endpoint real
+      // const response = await fetch('/api/usuarios/estadisticas');
+      // const data = await response.json();
+      // setStats(data);
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      // TODO: Reemplazar con endpoint real
+      // const response = await fetch(`/api/usuarios/${userId}/detalles`);
+      // const data = await response.json();
+      // setSelectedUser(data);
+      // setShowModal(true);
+    } catch (error) {
+      console.error('Error al cargar detalles del usuario:', error);
+    }
+  };
 
   const getRiskBadge = (riesgo) => {
     switch (riesgo) {
@@ -103,8 +78,16 @@ export default function Usuarios() {
 
   const filteredUsers = usuarios.filter(user =>
     user.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.ciudad.toLowerCase().includes(searchQuery.toLowerCase())
+    user.ciudad?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div style={{ padding: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <p style={{ color: '#64748b' }}>Cargando usuarios...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '2rem', backgroundColor: 'rgba(241, 245, 249, 0.3)', minHeight: '100vh' }}>
@@ -120,7 +103,7 @@ export default function Usuarios() {
             <h3 style={{ fontSize: '0.875rem', fontWeight: '500' }}>Total Usuarios</h3>
           </div>
           <div style={{ padding: '1.5rem', paddingTop: '0' }}>
-            <div style={{ fontSize: '1.875rem', fontWeight: '700' }}>1,247</div>
+            <div style={{ fontSize: '1.875rem', fontWeight: '700' }}>{stats.total}</div>
             <p style={{ fontSize: '0.75rem', color: '#64748b' }}>Registrados</p>
           </div>
         </div>
@@ -130,8 +113,8 @@ export default function Usuarios() {
             <h3 style={{ fontSize: '0.875rem', fontWeight: '500' }}>Activos Hoy</h3>
           </div>
           <div style={{ padding: '1.5rem', paddingTop: '0' }}>
-            <div style={{ fontSize: '1.875rem', fontWeight: '700' }}>892</div>
-            <p style={{ fontSize: '0.75rem', color: '#0ea5e9' }}>71.5% del total</p>
+            <div style={{ fontSize: '1.875rem', fontWeight: '700' }}>{stats.activeToday}</div>
+            <p style={{ fontSize: '0.75rem', color: '#0ea5e9' }}>{stats.activeTodayPercentage}% del total</p>
           </div>
         </div>
 
@@ -140,7 +123,7 @@ export default function Usuarios() {
             <h3 style={{ fontSize: '0.875rem', fontWeight: '500' }}>En Riesgo</h3>
           </div>
           <div style={{ padding: '1.5rem', paddingTop: '0' }}>
-            <div style={{ fontSize: '1.875rem', fontWeight: '700', color: '#ea580c' }}>156</div>
+            <div style={{ fontSize: '1.875rem', fontWeight: '700', color: '#ea580c' }}>{stats.atRisk}</div>
             <p style={{ fontSize: '0.75rem', color: '#64748b' }}>Requieren seguimiento</p>
           </div>
         </div>
@@ -150,8 +133,8 @@ export default function Usuarios() {
             <h3 style={{ fontSize: '0.875rem', fontWeight: '500' }}>Estables</h3>
           </div>
           <div style={{ padding: '1.5rem', paddingTop: '0' }}>
-            <div style={{ fontSize: '1.875rem', fontWeight: '700', color: '#0ea5e9' }}>1,091</div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b' }}>87.5% del total</p>
+            <div style={{ fontSize: '1.875rem', fontWeight: '700', color: '#0ea5e9' }}>{stats.stable}</div>
+            <p style={{ fontSize: '0.75rem', color: '#64748b' }}>{stats.stablePercentage}% del total</p>
           </div>
         </div>
       </div>
@@ -174,69 +157,75 @@ export default function Usuarios() {
           </div>
         </div>
 
-        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {filteredUsers.map((usuario) => {
-            const badge = getRiskBadge(usuario.riesgo);
-            
-            return (
-              <div
-                key={usuario.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1rem',
-                  backgroundColor: 'rgba(241, 245, 249, 0.5)',
-                  borderRadius: '0.5rem',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.2s'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(241, 245, 249, 0.8)'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(241, 245, 249, 0.5)'}
-                onClick={() => {
-                  setSelectedUser(usuario);
-                  setShowModal(true);
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: 1 }}>
-                  <div style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Users style={{ width: '1.5rem', height: '1.5rem', color: '#0ea5e9' }} />
-                  </div>
-
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                      <span style={{ fontWeight: '600' }}>{usuario.id}</span>
-                      <span className="badge" style={{ backgroundColor: badge.bg, color: 'white' }}>
-                        {badge.text}
-                      </span>
-                      <span className="badge badge-outline">Score: {usuario.score}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
-                      <span>{usuario.edad} años</span>
-                      <span>•</span>
-                      <span>{usuario.ciudad}</span>
-                      <span>•</span>
-                      <span>{usuario.conversaciones} conversaciones</span>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {usuario.tendencia > 0 ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#16a34a' }}>
-                        <TrendingUp style={{ width: '1rem', height: '1rem' }} />
-                        <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>+{usuario.tendencia}%</span>
+        <div style={{ padding: '1.5rem' }}>
+          {filteredUsers.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '3rem 0', color: '#64748b' }}>
+              <Users style={{ width: '3rem', height: '3rem', margin: '0 auto 1rem', color: '#94a3b8' }} />
+              <p>No se encontraron usuarios</p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {filteredUsers.map((usuario) => {
+                const badge = getRiskBadge(usuario.riesgo);
+                
+                return (
+                  <div
+                    key={usuario.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '1rem',
+                      backgroundColor: 'rgba(241, 245, 249, 0.5)',
+                      borderRadius: '0.5rem',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(241, 245, 249, 0.8)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(241, 245, 249, 0.5)'}
+                    onClick={() => fetchUserDetails(usuario.id)}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: 1 }}>
+                      <div style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Users style={{ width: '1.5rem', height: '1.5rem', color: '#0ea5e9' }} />
                       </div>
-                    ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#dc2626' }}>
-                        <TrendingDown style={{ width: '1rem', height: '1rem' }} />
-                        <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{usuario.tendencia}%</span>
+
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                          <span style={{ fontWeight: '600' }}>{usuario.id}</span>
+                          <span className="badge" style={{ backgroundColor: badge.bg, color: 'white' }}>
+                            {badge.text}
+                          </span>
+                          <span className="badge badge-outline">Score: {usuario.score}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
+                          <span>{usuario.edad} años</span>
+                          <span>•</span>
+                          <span>{usuario.ciudad}</span>
+                          <span>•</span>
+                          <span>{usuario.conversaciones} conversaciones</span>
+                        </div>
                       </div>
-                    )}
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        {usuario.tendencia > 0 ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#16a34a' }}>
+                            <TrendingUp style={{ width: '1rem', height: '1rem' }} />
+                            <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>+{usuario.tendencia}%</span>
+                          </div>
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#dc2626' }}>
+                            <TrendingDown style={{ width: '1rem', height: '1rem' }} />
+                            <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{usuario.tendencia}%</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -266,7 +255,7 @@ export default function Usuarios() {
               {/* Perfil */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1rem', backgroundColor: 'rgba(241, 245, 249, 0.5)', borderRadius: '0.5rem', marginBottom: '1.5rem' }}>
                 <div style={{ width: '5rem', height: '5rem', borderRadius: '50%', backgroundColor: 'rgba(14, 165, 233, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <UserIcon style={{ width: '2.5rem', height: '2.5rem', color: '#0ea5e9' }} />
+                  <Users style={{ width: '2.5rem', height: '2.5rem', color: '#0ea5e9' }} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
@@ -314,7 +303,7 @@ export default function Usuarios() {
                 <div className="card">
                   <div style={{ padding: '1rem', textAlign: 'center' }}>
                     <Shield style={{ width: '2rem', height: '2rem', color: '#0ea5e9', margin: '0 auto 0.5rem' }} />
-                    <p style={{ fontSize: '1.5rem', fontWeight: '700' }}>{selectedUser.intervenciones.length}</p>
+                    <p style={{ fontSize: '1.5rem', fontWeight: '700' }}>{selectedUser.intervenciones?.length || 0}</p>
                     <p style={{ fontSize: '0.75rem', color: '#64748b' }}>Intervenciones</p>
                   </div>
                 </div>
@@ -334,26 +323,28 @@ export default function Usuarios() {
               </div>
 
               {/* Temas recurrentes */}
-              <div className="card" style={{ marginBottom: '1.5rem' }}>
-                <div style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>
-                  <h4 style={{ fontWeight: '600' }}>Temas Más Discutidos con la IA</h4>
-                </div>
-                <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {selectedUser.temasRecurrentes.map((tema, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', backgroundColor: 'rgba(241, 245, 249, 0.5)', borderRadius: '0.375rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>
-                          {idx + 1}
+              {selectedUser.temasRecurrentes && selectedUser.temasRecurrentes.length > 0 && (
+                <div className="card" style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>
+                    <h4 style={{ fontWeight: '600' }}>Temas Más Discutidos con la IA</h4>
+                  </div>
+                  <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {selectedUser.temasRecurrentes.map((tema, idx) => (
+                      <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', backgroundColor: 'rgba(241, 245, 249, 0.5)', borderRadius: '0.375rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>
+                            {idx + 1}
+                          </div>
+                          <span style={{ textTransform: 'capitalize' }}>{tema.nombre}</span>
                         </div>
-                        <span style={{ textTransform: 'capitalize' }}>{tema}</span>
+                        <span className="badge badge-secondary">
+                          {tema.menciones} menciones
+                        </span>
                       </div>
-                      <span className="badge badge-secondary">
-                        {Math.floor(Math.random() * 20) + 10} menciones
-                      </span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Historial de intervenciones */}
               <div className="card">
@@ -361,7 +352,12 @@ export default function Usuarios() {
                   <h4 style={{ fontWeight: '600' }}>Historial de Intervenciones</h4>
                 </div>
                 <div style={{ padding: '1rem' }}>
-                  {selectedUser.intervenciones.length > 0 ? (
+                  {!selectedUser.intervenciones || selectedUser.intervenciones.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '2rem 0', color: '#64748b' }}>
+                      <Shield style={{ width: '3rem', height: '3rem', margin: '0 auto 1rem', color: '#94a3b8' }} />
+                      <p>No hay intervenciones registradas aún</p>
+                    </div>
+                  ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       {selectedUser.intervenciones.map((intervencion, idx) => (
                         <div key={idx} style={{ padding: '1rem', borderLeft: '4px solid #0ea5e9', backgroundColor: 'rgba(14, 165, 233, 0.05)', borderRadius: '0.375rem' }}>
@@ -374,10 +370,6 @@ export default function Usuarios() {
                           </div>
                         </div>
                       ))}
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: 'center', padding: '2rem 0', color: '#64748b' }}>
-                      No hay intervenciones registradas aún
                     </div>
                   )}
                 </div>
