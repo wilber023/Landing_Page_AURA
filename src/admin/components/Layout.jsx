@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Activity, LayoutDashboard, Users, AlertTriangle, BarChart3, LogOut, User as UserIcon } from 'lucide-react';
+import { Activity, LayoutDashboard, Users, AlertTriangle, BarChart3, LogOut, User as UserIcon, ScatterChart, Database } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 
 export default function Layout() {
@@ -14,8 +14,10 @@ export default function Layout() {
 
 const navItems = [
   { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/app/alertas', icon: AlertTriangle, label: 'Alertas' },
   { to: '/app/usuarios', icon: Users, label: 'Usuarios' },
+  { to: '/app/visualizaciones', icon: ScatterChart, label: 'Visualizaciones' },
+  { to: '/app/etl', icon: Database, label: 'ETL & Clustering' },
+  { to: '/app/alertas', icon: AlertTriangle, label: 'Alertas' },
   { to: '/app/analiticas', icon: BarChart3, label: 'Analíticas' },
 ];
 

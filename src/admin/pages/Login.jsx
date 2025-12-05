@@ -1,38 +1,28 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Activity, Loader2, Mail, Lock } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);
     setError('');
 
     try {
-      // TODO: Reemplazar con endpoint real
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password })
-      // });
-      
-      // if (!response.ok) {
-      //   const data = await response.json();
-      //   throw new Error(data.message || 'Error al iniciar sesión');
-      // }
-      
-      // const data = await response.json();
-      // // Guardar token en localStorage o contexto
-      // localStorage.setItem('token', data.token);
-      // // Redirigir al dashboard
-      // window.location.href = '/dashboard';
-      
-      // Simulación temporal para desarrollo
-      console.log('Login attempt:', { email, password });
-      setError('Funcionalidad de login pendiente de implementación');
+      const result = await login(email, password);
+
+      if (result.success) {
+        navigate('/app/dashboard');
+      } else {
+        setError(result.error || 'Error al iniciar sesión');
+      }
     } catch (err) {
       setError(err.message || 'Error al iniciar sesión');
     } finally {

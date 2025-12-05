@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Users, MessageSquare, AlertTriangle, Activity, Clock, Heart, CheckCircle, Shield, Zap } from 'lucide-react';
+import { Users, MessageSquare, AlertTriangle, Activity, Clock, Heart, CheckCircle, Shield, Zap, RefreshCw } from 'lucide-react';
+import { clusteringAPI } from '../api/clustering';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -11,7 +12,7 @@ export default function Dashboard() {
     interventions: 0,
     interventionsAvgTime: 0
   });
-  
+
   const [emotionalState, setEmotionalState] = useState({
     stable: 0,
     attention: 0,
@@ -28,34 +29,109 @@ export default function Dashboard() {
     monitoringPercentage: 0
   });
 
+  const [clusteringMetrics, setClusteringMetrics] = useState(null);
   const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [serviceHealth, setServiceHealth] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
+    checkServiceHealth();
   }, []);
+
+  const checkServiceHealth = async () => {
+    try {
+      const health = await clusteringAPI.checkHealth();
+      setServiceHealth(health);
+    } catch (error) {
+      console.error('Error verificando salud del servicio:', error);
+      setServiceHealth({ healthy: false, error: error.message });
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // TODO: Reemplazar con endpoints reales
-      // const statsRes = await fetch('/api/dashboard/stats');
-      // const statsData = await statsRes.json();
-      // setStats(statsData);
 
-      // const emotionalRes = await fetch('/api/dashboard/emotional-state');
-      // const emotionalData = await emotionalRes.json();
-      // setEmotionalState(emotionalData);
+      // Obtener resultados del clustering (endpoint /results del README)
+      const results = await clusteringAPI.getClusteringResults();
 
-      // const metricsRes = await fetch('/api/dashboard/response-metrics');
-      // const metricsData = await metricsRes.json();
-      // setResponseMetrics(metricsData);
+      // Estructurar métricas según respuesta del README
+      const metrics = {
+        execution_date: results.execution_date,
+        silhouette_score: results.metrics?.silhouette_score,
+        calinski_harabasz: results.metrics?.calinski_harabasz,
+        n_clusters: results.n_clusters || 4,
+        total_users: results.metrics?.total_users || results.total_users,
+        high_risk_percentage: results.metrics?.high_risk_percentage,
+      };
 
-      // const activityRes = await fetch('/api/dashboard/recent-activity');
-      // const activityData = await activityRes.json();
-      // setRecentActivity(activityData);
+      setClusteringMetrics(metrics);
+
+      // Obtener distribución de riesgo
+      const riskDist = results.risk_distribution || {};
+      const highRiskCount = riskDist.ALTO_RIESGO || 0;
+      const moderateRiskCount = riskDist.RIESGO_MODERADO || 0;
+      const lowRiskCount = riskDist.BAJO_RIESGO || 0;
+      const totalUsers = highRiskCount + moderateRiskCount + lowRiskCount;
+
+      // Actualizar estado emocional con datos reales
+      setEmotionalState({
+        stable: lowRiskCount,
+        attention: moderateRiskCount,
+        highRisk: highRiskCount,
+        total: totalUsers
+      });
+
+      // Actualizar estadísticas
+      setStats(prev => ({
+        ...prev,
+        activeUsers: totalUsers,
+        emergencies: highRiskCount,
+      }));
+
+      // Actualizar métricas de respuesta
+      setResponseMetrics(prev => ({
+        ...prev,
+        monitoring: highRiskCount + moderateRiskCount,
+        monitoringPercentage: totalUsers > 0 ?
+          Math.round(((highRiskCount + moderateRiskCount) / totalUsers) * 100) : 0
+      }));
+
     } catch (error) {
       console.error('Error al cargar datos del dashboard:', error);
+      // Si falla /results, intentar con los endpoints individuales como fallback
+      try {
+        const [highRisk, moderateRisk, lowRisk] = await Promise.all([
+          clusteringAPI.getUsersByRisk('ALTO_RIESGO'),
+          clusteringAPI.getUsersByRisk('RIESGO_MODERADO'),
+          clusteringAPI.getUsersByRisk('BAJO_RIESGO'),
+        ]);
+
+        const totalUsers = highRisk.length + moderateRisk.length + lowRisk.length;
+
+        setEmotionalState({
+          stable: lowRisk.length,
+          attention: moderateRisk.length,
+          highRisk: highRisk.length,
+          total: totalUsers
+        });
+
+        setStats(prev => ({
+          ...prev,
+          activeUsers: totalUsers,
+          emergencies: highRisk.length,
+        }));
+
+        setResponseMetrics(prev => ({
+          ...prev,
+          monitoring: highRisk.length + moderateRisk.length,
+          monitoringPercentage: totalUsers > 0 ?
+            Math.round(((highRisk.length + moderateRisk.length) / totalUsers) * 100) : 0
+        }));
+      } catch (fallbackError) {
+        console.error('Error en fallback:', fallbackError);
+      }
     } finally {
       setLoading(false);
     }
@@ -90,10 +166,92 @@ export default function Dashboard() {
 
   return (
     <div style={{ padding: '2rem', backgroundColor: 'rgba(241, 245, 249, 0.3)', minHeight: '100vh' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.875rem', fontWeight: '700', marginBottom: '0.5rem' }}>Dashboard</h1>
-        <p style={{ color: '#64748b' }}>Vista general del sistema AURA</p>
+      <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h1 style={{ fontSize: '1.875rem', fontWeight: '700', marginBottom: '0.5rem' }}>Dashboard</h1>
+          <p style={{ color: '#64748b' }}>Vista general del sistema AURA</p>
+        </div>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {serviceHealth && (
+            <div style={{
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              backgroundColor: serviceHealth.healthy ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+              color: serviceHealth.healthy ? '#10b981' : '#ef4444',
+              fontSize: '0.875rem',
+              fontWeight: '500'
+            }}>
+              {serviceHealth.healthy ? '● Servicio activo' : '● Servicio inactivo'}
+            </div>
+          )}
+          <button
+            onClick={fetchDashboardData}
+            disabled={loading}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: '#0ea5e9',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              opacity: loading ? 0.6 : 1
+            }}
+          >
+            <RefreshCw style={{ width: '1rem', height: '1rem' }} />
+            Actualizar
+          </button>
+        </div>
       </div>
+
+      {clusteringMetrics && (
+        <div style={{
+          marginBottom: '1.5rem',
+          padding: '1.25rem',
+          backgroundColor: 'rgba(14, 165, 233, 0.05)',
+          borderRadius: '0.5rem',
+          border: '1px solid rgba(14, 165, 233, 0.2)'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+            <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#0ea5e9', margin: 0 }}>
+              📊 Métricas del Clustering
+            </h3>
+            {clusteringMetrics.execution_date && (
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                Última ejecución: {new Date(clusteringMetrics.execution_date).toLocaleString('es-MX')}
+              </span>
+            )}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', fontSize: '0.875rem' }}>
+            <div style={{ padding: '0.75rem', backgroundColor: 'white', borderRadius: '0.375rem' }}>
+              <div style={{ color: '#64748b', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Silhouette Score</div>
+              <div style={{ fontWeight: '700', fontSize: '1.125rem' }}>{clusteringMetrics.silhouette_score?.toFixed(3) || 'N/A'}</div>
+            </div>
+            <div style={{ padding: '0.75rem', backgroundColor: 'white', borderRadius: '0.375rem' }}>
+              <div style={{ color: '#64748b', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Calinski-Harabasz</div>
+              <div style={{ fontWeight: '700', fontSize: '1.125rem' }}>{clusteringMetrics.calinski_harabasz?.toFixed(1) || 'N/A'}</div>
+            </div>
+            <div style={{ padding: '0.75rem', backgroundColor: 'white', borderRadius: '0.375rem' }}>
+              <div style={{ color: '#64748b', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Número de Clusters</div>
+              <div style={{ fontWeight: '700', fontSize: '1.125rem' }}>{clusteringMetrics.n_clusters || 'N/A'}</div>
+            </div>
+            <div style={{ padding: '0.75rem', backgroundColor: 'white', borderRadius: '0.375rem' }}>
+              <div style={{ color: '#64748b', fontSize: '0.75rem', marginBottom: '0.25rem' }}>Total Usuarios</div>
+              <div style={{ fontWeight: '700', fontSize: '1.125rem' }}>{clusteringMetrics.total_users || emotionalState.total}</div>
+            </div>
+            <div style={{ padding: '0.75rem', backgroundColor: 'rgba(239, 68, 68, 0.05)', borderRadius: '0.375rem', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+              <div style={{ color: '#64748b', fontSize: '0.75rem', marginBottom: '0.25rem' }}>% Alto Riesgo</div>
+              <div style={{ fontWeight: '700', fontSize: '1.125rem', color: '#ef4444' }}>
+                {clusteringMetrics.high_risk_percentage?.toFixed(1) || 0}%
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Métricas principales */}
       <div className="grid grid-cols-4 gap-4" style={{ marginBottom: '1.5rem' }}>

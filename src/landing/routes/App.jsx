@@ -9,7 +9,9 @@ import Dashboard from '../../admin/pages/Dashboard';
 import Alertas from '../../admin/pages/Alertas';
 import Usuarios from '../../admin/pages/Usuarios';
 import Analiticas from '../../admin/pages/Analiticas';
-import './App.css'; 
+import Visualizaciones from '../../admin/pages/Visualizaciones';
+import ETL from '../../admin/pages/ETL';
+import './App.css';
 import Feed from "../../admin/pages/feed";
 
 function App() {
@@ -22,7 +24,7 @@ function App() {
           <Route path="/privacidad" element={<PrivacyNoticePage />} />
           <Route path="/acceso-feed" element={<Feed />} />
           <Route path="/login" element={<Login />} />
-          
+
           <Route
             path="/app"
             element={
@@ -33,10 +35,12 @@ function App() {
           >
             <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="alertas" element={<Alertas />} />
             <Route path="usuarios" element={<Usuarios />} />
+            <Route path="visualizaciones" element={<Visualizaciones />} />
+            <Route path="etl" element={<ETL />} />
+            <Route path="alertas" element={<Alertas />} />
             <Route path="analiticas" element={<Analiticas />} />
-          </Route>xº
+          </Route>
           <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
